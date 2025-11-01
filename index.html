@@ -8,110 +8,75 @@
 
 <style>
 :root{
-  /* Paleta playa pastel con morado principal */
-  --morado:#cbb2fe;
-  --morado-2:#b49af9;
-  --rosa:#f7b9e7;
-  --azul:#aee6ff;
-  --menta:#c8ffd4;
-  --arena:#fff4e6;
-  --tinta:#4a365a;
-  --sombra: rgba(0,0,0,.18);
+  --morado:#cbb2fe; --morado-2:#b49af9; --rosa:#f7b9e7; --azul:#aee6ff;
+  --menta:#c8ffd4; --arena:#fff4e6; --tinta:#4a365a; --sombra: rgba(0,0,0,.18);
 }
-
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
-  margin:0;
-  font-family: Quicksand, system-ui, sans-serif;
-  color:var(--tinta);
-  display:grid; place-items:center;
+  margin:0; font-family:Quicksand,system-ui,sans-serif; color:var(--tinta);
+  display:grid; place-items:center; overflow-x:hidden; background-attachment:fixed;
   background:
     radial-gradient(80vw 60vh at 20% 15%, #e7d7ff 0, transparent 60%),
     radial-gradient(60vw 50vh at 85% 10%, #ffd4ec 0, transparent 60%),
     linear-gradient(160deg, var(--morado) 0%, var(--rosa) 40%, var(--azul) 100%);
-  background-attachment: fixed;
-  overflow-x:hidden;
 }
 
-/* Cielo/Mar/Arena estilo playa */
-.scene{
-  position:relative;
-  width:min(1000px, 94vw);
-  padding: 24px 16px 100px;
-  text-align:center;
-}
-h1{
-  font-family:'Dancing Script', cursive;
-  font-size: clamp(36px, 7vw, 66px);
-  color:#5b3fa3;
-  margin: 6px 0 2px;
-  text-shadow: 0 8px 22px rgba(90,60,130,.25);
-}
-.subtitle{opacity:.85; margin-bottom:14px}
+/* Escena */
+.scene{ position:relative; width:min(1000px,94vw); padding:24px 16px 120px; text-align:center; }
+h1{ font-family:'Dancing Script',cursive; font-size:clamp(36px,7vw,66px); color:#5b3fa3;
+    margin:6px 0 2px; text-shadow:0 8px 22px rgba(90,60,130,.25); }
+.subtitle{ opacity:.85; margin-bottom:14px }
 
 /* Botón */
-#open{position:absolute; left:-9999px}
+#open{ position:absolute; left:-9999px }
 .btn{
-  display:inline-block; cursor:pointer;
-  background: linear-gradient(180deg, var(--morado-2), #8f74f4);
-  color:#fff; font-weight:700;
-  padding: 12px 22px; border-radius:999px;
-  box-shadow: 0 10px 26px rgba(96,61,190,.35);
-  transition: transform .15s ease, box-shadow .2s ease;
-  margin-bottom:18px;
+  display:inline-block; cursor:pointer; margin-bottom:18px;
+  background:linear-gradient(180deg,var(--morado-2),#8f74f4); color:#fff; font-weight:700;
+  padding:12px 22px; border-radius:999px; box-shadow:0 10px 26px rgba(96,61,190,.35);
+  transition:transform .15s ease, box-shadow .2s ease;
 }
-.btn:hover{ transform:translateY(-2px); box-shadow:0 14px 30px rgba(96,61,190,.4)}
+.btn:hover{ transform:translateY(-2px); box-shadow:0 14px 30px rgba(96,61,190,.4) }
 
-/* Fondo playa (mar y arena) */
+/* SOL */
+.sun{
+  position:absolute; width:90px;height:90px;border-radius:50%; top:40px; right:10%;
+  background: radial-gradient(circle at 30% 30%, #fff, #fff0 70%),
+             radial-gradient(circle, #fff8 30%, #ffd4f340 60%, #ffd4f31a 80%, transparent 100%),
+             #fff6a0;
+  mix-blend-mode: screen; filter: blur(.3px);
+}
+
+/* === PLAYA FIJA (cubre toda la parte inferior) === */
 .beach{
-  position:absolute; left:0; right:0; bottom:0; height: 42vh; min-height:300px;
-  background:
-    radial-gradient(60vw 20vh at 50% -10%, rgba(255,255,255,.55), transparent 70%),
-    linear-gradient(0deg, var(--arena) 0 44%, #dff8ff 45% 53%, transparent 0);
-  filter: saturate(1.05);
+  position:fixed; left:0; right:0; bottom:0;
+  /* top define dónde empieza la playa: ajusta 50–62vh a tu gusto */
+  top: clamp(420px, 56vh, 62vh);
   z-index:-1;
+  /* de abajo (arena) hacia arriba (mar) */
+  background: linear-gradient(0deg, var(--arena) 0 46%, #dff8ff 46% 100%);
 }
 .wave{
-  position:absolute; left:0; right:0; bottom:52%;
-  height:70px; pointer-events:none; opacity:.7;
-  background:
-    radial-gradient(40px 14px at 10% 50%, #ffffffaa 40%, transparent 41%) repeat-x;
-  background-size:120px 70px;
-  animation: tide 9s linear infinite;
+  position:absolute; left:0; right:0; top:44%; height:80px; opacity:.75; pointer-events:none;
+  background: radial-gradient(40px 14px at 10% 50%, #ffffffcc 40%, transparent 41%) repeat-x;
+  background-size:120px 80px; animation:tide 9s linear infinite;
 }
-@keyframes tide{to{background-position-x:-120px}}
-
-.sun{
-  position:absolute; width:90px; height:90px; border-radius:50%;
-  top:40px; right:10%; background: radial-gradient(circle at 30% 30%, #fff, #fff0 70%),
-                                 radial-gradient(circle, #fff8 30%, #ffd4f340 60%, #ffd4f31a 80%, transparent 100%),
-                                 #fff6a0;
-  mix-blend-mode: screen; filter: blur(0.3px);
-}
+@keyframes tide{ to{ background-position-x:-120px } }
 
 /* BOTELLA */
 .glass{
-  position:relative;
-  margin: 10px auto 0;
-  width:min(78vw, 460px);
-  height: 520px;
-  filter: drop-shadow(0 30px 40px rgba(0,0,0,.25));
-  transform: rotate(-2deg);
+  position:relative; margin:10px auto 0; width:min(78vw,460px); height:520px;
+  filter:drop-shadow(0 30px 40px rgba(0,0,0,.25));
+  transform-origin:center bottom;
+  transform: translateY(0);           /* ← sin rotaciones para evitar bamboleo */
   transition: transform 1s ease;
 }
-
-/* cuerpo de vidrio con pseudo-elementos */
 .bottle{
-  position:absolute; inset:0;
-  border-radius: 120px / 260px;
-  background: linear-gradient(145deg, #ffffffcc, #eaf6ffcc);
-  border: 3px solid #ffffff88;
-  box-shadow:
-    inset 0 0 60px rgba(255,255,255,.55),
-    inset 0 0 140px rgba(173,216,255,.35);
-  backdrop-filter: blur(10px);
-  overflow:hidden;
+  position:absolute; inset:0; border-radius:120px / 260px;
+  background:linear-gradient(145deg,#ffffffcc,#eaf6ffcc);
+  border:3px solid #ffffff88;
+  box-shadow: inset 0 0 60px rgba(255,255,255,.55), inset 0 0 140px rgba(173,216,255,.35);
+  backdrop-filter: blur(10px); overflow:hidden;
 }
 .bottle::before{
   content:""; position:absolute; inset:0;
@@ -122,44 +87,36 @@ h1{
 }
 .neck{
   position:absolute; top:-36px; left:50%; transform:translateX(-50%);
-  width:120px; height:46px; border-radius: 26px;
-  background: #ffffffaa; border:3px solid #ffffff88;
+  width:120px; height:46px; border-radius:26px; background:#ffffffaa; border:3px solid #ffffff88;
   box-shadow: inset 0 0 20px rgba(255,255,255,.7);
 }
-
-/* corcho */
 .cork{
-  position:absolute; top:-18px; left:50%; transform: translateX(-50%);
-  width:90px; height:28px; border-radius: 8px;
-  background: #a06f50;
-  box-shadow: 0 4px 10px rgba(0,0,0,.25), inset 0 -4px 10px rgba(0,0,0,.2);
-  transition: transform 1s ease;
-  z-index:2;
+  position:absolute; top:-18px; left:50%; transform:translateX(-50%);
+  width:90px; height:28px; border-radius:8px; background:#a06f50;
+  box-shadow:0 4px 10px rgba(0,0,0,.25), inset 0 -4px 10px rgba(0,0,0,.2);
+  transition: transform 1s ease; z-index:2;
 }
 
-/* PERGAMINO enrollado visible dentro de la botella */
+/* PERGAMINO enrollado dentro */
 .scroll{
   position:absolute; bottom:70px; left:50%; transform:translateX(-50%);
-  width:72%; height: 180px;
+  width:72%; height:180px; opacity:.95; border-radius:10px;
   background:
     radial-gradient(30px 40px at 3% 50%, #f3e3d4 60%, #e8d6c3 61% 68%, transparent 69%) no-repeat,
     radial-gradient(30px 40px at 97% 50%, #f3e3d4 60%, #e8d6c3 61% 68%, transparent 69%) no-repeat,
-    repeating-linear-gradient(0deg, #f6e9da 0 10px, #f2e3d4 10px 20px);
-  background-size: 60px 110%, 60px 110%, 100% 100%;
-  background-position: left center, right center, center;
-  border-radius: 10px;
-  box-shadow: 0 8px 14px rgba(0,0,0,.2);
-  opacity:.95;
+    repeating-linear-gradient(0deg,#f6e9da 0 10px,#f2e3d4 10px 20px);
+  background-size:60px 110%, 60px 110%, 100% 100%;
+  background-position:left center, right center, center;
+  box-shadow:0 8px 14px rgba(0,0,0,.2);
   transition: transform 1s ease;
 }
 
-/* LA CARTA DESENROLLADA (fuera de la botella) */
+/* CARTA desplegada */
 .paper{
-  position:absolute; left:50%; transform:translateX(-50%) scale(.95);
-  bottom:-260px; width:min(820px, 90vw); max-width:820px;
-  max-height: 46vh; padding: 22px 18px 16px;
-  background: var(--arena);
-  /* bordes irregulares tipo papel quemado/arrugado */
+  position:absolute; left:50%; bottom:-260px; transform-origin:bottom center;
+  transform: translateX(-50%) scale(.95); /* ← siempre centrada */
+  width:min(820px,90vw); max-height:46vh; padding:22px 18px 16px;
+  background:var(--arena); border:2px solid #ead8c8; border-radius:8px;
   -webkit-mask:
     radial-gradient(20px 26px at 0% 10%, transparent 40%, #000 41%) 0 0 / 60px 60px repeat-x,
     radial-gradient(20px 26px at 100% 90%, transparent 40%, #000 41%) 0 100%/60px 60px repeat-x,
@@ -168,56 +125,32 @@ h1{
     radial-gradient(20px 26px at 0% 10%, transparent 40%, #000 41%) 0 0 / 60px 60px repeat-x,
     radial-gradient(20px 26px at 100% 90%, transparent 40%, #000 41%) 0 100%/60px 60px repeat-x,
     linear-gradient(#000,#000);
-  border-radius: 8px;
-  border: 2px solid #ead8c8;
-  box-shadow: 0 10px 30px rgba(0,0,0,.25);
-  background-image:
-    repeating-linear-gradient(160deg, #f3e3d4 0 12px, #f8efe6 12px 24px);
-  overflow:hidden;
-  display:grid; grid-template-rows:auto 1fr auto;
-  transform-origin: bottom center;
-  opacity:0;
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
+  background-image: repeating-linear-gradient(160deg,#f3e3d4 0 12px,#f8efe6 12px 24px);
+  display:grid; grid-template-rows:auto 1fr auto; overflow:hidden; opacity:0;
   transition: transform 1s ease, opacity 1s ease, bottom 1s ease;
 }
+.paper h2{ font-family:'Dancing Script',cursive; color:#7b57b5; margin:2px 0 6px;
+           font-size:clamp(22px,3.4vw,30px); }
+.content{ text-align:justify; line-height:1.75; font-size:15px; padding-right:8px; overflow:auto; }
+.content[contenteditable="true"]{ outline:none }
+.content::-webkit-scrollbar{ width:8px } .content::-webkit-scrollbar-thumb{ background:#e1c7a9; border-radius:8px }
+.sign{ text-align:right; color:#7b57b5; margin:10px 6px 6px; font-style:italic }
 
-/* Título y texto de la carta */
-.paper h2{
-  font-family:'Dancing Script', cursive;
-  color:#7b57b5; margin:2px 0 6px; font-size: clamp(22px, 3.4vw, 30px);
-}
-.content{
-  text-align: justify;
-  line-height:1.75; font-size: 15px;
-  padding-right:8px; overflow:auto;
-}
-.content[contenteditable="true"]{outline:none}
-.content::-webkit-scrollbar{width:8px}
-.content::-webkit-scrollbar-thumb{background:#e1c7a9;border-radius:8px}
+/* Estado ABIERTO: sin rotaciones laterales */
+#open:checked ~ .scene .glass{ transform: translateY(-8px); }
+#open:checked ~ .scene .cork{ transform: translateX(-50%) translateY(-90px) rotate(-6deg); }
+#open:checked ~ .scene .scroll{ transform: translateX(-50%) translateY(-120px); }
+#open:checked ~ .scene .paper{ bottom:-10px; opacity:1; transform: translateX(-50%) scale(1); }
 
-/* firma */
-.sign{ text-align:right; color:#7b57b5; margin:10px 6px 6px; font-style:italic}
-
-/* Estados al abrir */
-#open:checked ~ .scene .glass{ transform: rotate(2deg) translateY(-8px)}
-#open:checked ~ .scene .cork{ transform: translateX(-50%) translateY(-90px) rotate(-6deg)}
-#open:checked ~ .scene .scroll{ transform:translateX(-50%) translateY(-120px) rotate(-2deg)}
-#open:checked ~ .scene .paper{
-  bottom: -10px; opacity:1;
-  transform: translateX(-50%) scale(1);
-}
-
-/* Burbujas marinas sutiles */
+/* Burbujas decorativas */
 .bubbles span{
-  position:absolute; bottom:-20px;
-  width:16px;height:16px;border-radius:50%;
-  background: #ffffff80; filter: blur(.2px);
-  animation: rise 8s linear infinite;
+  position:absolute; bottom:-20px; width:16px; height:16px; border-radius:50%;
+  background:#ffffff80; filter:blur(.2px); animation: rise 8s linear infinite;
 }
-@keyframes rise{
-  from{ transform: translateY(0) translateX(0) scale(1); opacity:.6}
-  to{ transform: translateY(-100vh) translateX(40px) scale(.9); opacity:0}
-}
-footer{margin-top:10px; font-size:12px; opacity:.7}
+@keyframes rise{ from{ transform:translateY(0) translateX(0) scale(1); opacity:.6 }
+                 to{ transform:translateY(-100vh) translateX(40px) scale(.9); opacity:0 } }
+footer{ margin-top:10px; font-size:12px; opacity:.7 }
 </style>
 </head>
 <body>
@@ -235,15 +168,12 @@ footer{margin-top:10px; font-size:12px; opacity:.7}
     <div class="bottle">
       <div class="neck"></div>
       <div class="cork"></div>
-      <!-- pergamino enrollado visible dentro -->
       <div class="scroll" aria-hidden="true"></div>
     </div>
 
-    <!-- carta desplegada fuera de la botella -->
+    <!-- Carta -->
     <article class="paper" role="document" aria-label="Carta">
       <h2>Para mi tesoro en la orilla 💜</h2>
-
-      <!-- Escribe aquí: texto largo permitido con scroll -->
       <div class="content" contenteditable="true" spellcheck="false">
         Hoy dejo esta carta en tus manos como quien encuentra un mapa del tesoro:
         cada línea señala un recuerdo, cada palabra guarda una risa, un abrazo, una promesa.
@@ -255,12 +185,11 @@ footer{margin-top:10px; font-size:12px; opacity:.7}
         <br><br>
         Aquí dejo todo lo que siento —y todavía me queda mucho por escribir…
       </div>
-
       <p class="sign">Con todo mi amor,<br><strong>Tu pirata del corazón ⚓</strong></p>
     </article>
   </div>
 
-  <!-- playa -->
+  <!-- Playa fija -->
   <div class="beach">
     <div class="wave"></div>
   </div>
