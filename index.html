@@ -1,217 +1,280 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Carta en la Botella 💜</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-:root {
-  --morado: #cbb2fe;
-  --rosa: #f7b9e7;
-  --azul: #aee6ff;
-  --arena: #fff4e6;
-  --verde: #c8ffd4;
-  --texto: #4a385b;
+:root{
+  /* Paleta playa pastel con morado principal */
+  --morado:#cbb2fe;
+  --morado-2:#b49af9;
+  --rosa:#f7b9e7;
+  --azul:#aee6ff;
+  --menta:#c8ffd4;
+  --arena:#fff4e6;
+  --tinta:#4a365a;
+  --sombra: rgba(0,0,0,.18);
 }
 
-/* Fondo estilo marino pastel */
-body {
-  margin: 0;
-  height: 100vh;
-  font-family: 'Quicksand', sans-serif;
-  color: var(--texto);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(160deg, var(--morado) 0%, var(--rosa) 40%, var(--azul) 100%);
-  overflow: hidden;
-  position: relative;
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: Quicksand, system-ui, sans-serif;
+  color:var(--tinta);
+  display:grid; place-items:center;
+  background:
+    radial-gradient(80vw 60vh at 20% 15%, #e7d7ff 0, transparent 60%),
+    radial-gradient(60vw 50vh at 85% 10%, #ffd4ec 0, transparent 60%),
+    linear-gradient(160deg, var(--morado) 0%, var(--rosa) 40%, var(--azul) 100%);
+  background-attachment: fixed;
+  overflow-x:hidden;
 }
 
-/* Ondas suaves al fondo */
-body::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 30% 110%, var(--verde) 0%, transparent 60%),
-              radial-gradient(circle at 80% 100%, var(--arena) 0%, transparent 50%);
-  opacity: 0.6;
-  z-index: 0;
+/* Cielo/Mar/Arena estilo playa */
+.scene{
+  position:relative;
+  width:min(1000px, 94vw);
+  padding: 24px 16px 100px;
+  text-align:center;
+}
+h1{
+  font-family:'Dancing Script', cursive;
+  font-size: clamp(36px, 7vw, 66px);
+  color:#5b3fa3;
+  margin: 6px 0 2px;
+  text-shadow: 0 8px 22px rgba(90,60,130,.25);
+}
+.subtitle{opacity:.85; margin-bottom:14px}
+
+/* Botón */
+#open{position:absolute; left:-9999px}
+.btn{
+  display:inline-block; cursor:pointer;
+  background: linear-gradient(180deg, var(--morado-2), #8f74f4);
+  color:#fff; font-weight:700;
+  padding: 12px 22px; border-radius:999px;
+  box-shadow: 0 10px 26px rgba(96,61,190,.35);
+  transition: transform .15s ease, box-shadow .2s ease;
+  margin-bottom:18px;
+}
+.btn:hover{ transform:translateY(-2px); box-shadow:0 14px 30px rgba(96,61,190,.4)}
+
+/* Fondo playa (mar y arena) */
+.beach{
+  position:absolute; left:0; right:0; bottom:0; height: 42vh; min-height:300px;
+  background:
+    radial-gradient(60vw 20vh at 50% -10%, rgba(255,255,255,.55), transparent 70%),
+    linear-gradient(0deg, var(--arena) 0 44%, #dff8ff 45% 53%, transparent 0);
+  filter: saturate(1.05);
+  z-index:-1;
+}
+.wave{
+  position:absolute; left:0; right:0; bottom:52%;
+  height:70px; pointer-events:none; opacity:.7;
+  background:
+    radial-gradient(40px 14px at 10% 50%, #ffffffaa 40%, transparent 41%) repeat-x;
+  background-size:120px 70px;
+  animation: tide 9s linear infinite;
+}
+@keyframes tide{to{background-position-x:-120px}}
+
+.sun{
+  position:absolute; width:90px; height:90px; border-radius:50%;
+  top:40px; right:10%; background: radial-gradient(circle at 30% 30%, #fff, #fff0 70%),
+                                 radial-gradient(circle, #fff8 30%, #ffd4f340 60%, #ffd4f31a 80%, transparent 100%),
+                                 #fff6a0;
+  mix-blend-mode: screen; filter: blur(0.3px);
 }
 
-/* Título */
-h1 {
-  font-family: 'Dancing Script', cursive;
-  font-size: clamp(32px, 6vw, 60px);
-  color: #5b3fa3;
-  margin-bottom: 10px;
-  text-shadow: 2px 2px 10px rgba(90, 60, 130, 0.2);
-  z-index: 2;
-}
-.subtitle {
-  font-size: 16px;
-  opacity: 0.8;
-  z-index: 2;
+/* BOTELLA */
+.glass{
+  position:relative;
+  margin: 10px auto 0;
+  width:min(78vw, 460px);
+  height: 520px;
+  filter: drop-shadow(0 30px 40px rgba(0,0,0,.25));
+  transform: rotate(-2deg);
+  transition: transform 1s ease;
 }
 
-/* Botella */
-.bottle {
-  position: relative;
-  width: min(80vw, 420px);
-  height: 500px;
-  background: rgba(255, 255, 255, 0.25);
-  border-radius: 120px / 250px;
-  border: 3px solid rgba(255,255,255,0.4);
-  box-shadow: inset 0 0 40px rgba(255,255,255,0.3),
-              0 20px 60px rgba(0,0,0,0.2);
+/* cuerpo de vidrio con pseudo-elementos */
+.bottle{
+  position:absolute; inset:0;
+  border-radius: 120px / 260px;
+  background: linear-gradient(145deg, #ffffffcc, #eaf6ffcc);
+  border: 3px solid #ffffff88;
+  box-shadow:
+    inset 0 0 60px rgba(255,255,255,.55),
+    inset 0 0 140px rgba(173,216,255,.35);
   backdrop-filter: blur(10px);
-  overflow: hidden;
-  z-index: 2;
-  transition: transform 1s ease;
+  overflow:hidden;
+}
+.bottle::before{
+  content:""; position:absolute; inset:0;
+  background:
+    radial-gradient(120px 100% at 15% 30%, #ffffffcc 0, transparent 60%),
+    radial-gradient(120px 100% at 85% 70%, #ffffff80 0, transparent 60%);
+  mix-blend-mode: screen; pointer-events:none;
+}
+.neck{
+  position:absolute; top:-36px; left:50%; transform:translateX(-50%);
+  width:120px; height:46px; border-radius: 26px;
+  background: #ffffffaa; border:3px solid #ffffff88;
+  box-shadow: inset 0 0 20px rgba(255,255,255,.7);
 }
 
-/* Tapa */
-.cork {
-  position: absolute;
-  top: -25px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80px;
-  height: 30px;
+/* corcho */
+.cork{
+  position:absolute; top:-18px; left:50%; transform: translateX(-50%);
+  width:90px; height:28px; border-radius: 8px;
   background: #a06f50;
-  border-radius: 10px 10px 2px 2px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 10px rgba(0,0,0,.25), inset 0 -4px 10px rgba(0,0,0,.2);
   transition: transform 1s ease;
-  z-index: 3;
+  z-index:2;
 }
 
-/* Carta */
-.letter {
-  position: absolute;
-  bottom: -300px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80%;
-  height: 300px;
+/* PERGAMINO enrollado visible dentro de la botella */
+.scroll{
+  position:absolute; bottom:70px; left:50%; transform:translateX(-50%);
+  width:72%; height: 180px;
+  background:
+    radial-gradient(30px 40px at 3% 50%, #f3e3d4 60%, #e8d6c3 61% 68%, transparent 69%) no-repeat,
+    radial-gradient(30px 40px at 97% 50%, #f3e3d4 60%, #e8d6c3 61% 68%, transparent 69%) no-repeat,
+    repeating-linear-gradient(0deg, #f6e9da 0 10px, #f2e3d4 10px 20px);
+  background-size: 60px 110%, 60px 110%, 100% 100%;
+  background-position: left center, right center, center;
+  border-radius: 10px;
+  box-shadow: 0 8px 14px rgba(0,0,0,.2);
+  opacity:.95;
+  transition: transform 1s ease;
+}
+
+/* LA CARTA DESENROLLADA (fuera de la botella) */
+.paper{
+  position:absolute; left:50%; transform:translateX(-50%) scale(.95);
+  bottom:-260px; width:min(820px, 90vw); max-width:820px;
+  max-height: 46vh; padding: 22px 18px 16px;
   background: var(--arena);
+  /* bordes irregulares tipo papel quemado/arrugado */
+  -webkit-mask:
+    radial-gradient(20px 26px at 0% 10%, transparent 40%, #000 41%) 0 0 / 60px 60px repeat-x,
+    radial-gradient(20px 26px at 100% 90%, transparent 40%, #000 41%) 0 100%/60px 60px repeat-x,
+    linear-gradient(#000,#000);
+  mask:
+    radial-gradient(20px 26px at 0% 10%, transparent 40%, #000 41%) 0 0 / 60px 60px repeat-x,
+    radial-gradient(20px 26px at 100% 90%, transparent 40%, #000 41%) 0 100%/60px 60px repeat-x,
+    linear-gradient(#000,#000);
   border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
-  background-image: repeating-linear-gradient(160deg, #f3e3d4 0 10px, #f8efe6 10px 20px);
-  background-blend-mode: multiply;
-  overflow-y: auto;
-  font-size: 15px;
-  line-height: 1.6;
-  opacity: 0;
-  transition: bottom 1s ease, opacity 1s ease;
+  border: 2px solid #ead8c8;
+  box-shadow: 0 10px 30px rgba(0,0,0,.25);
+  background-image:
+    repeating-linear-gradient(160deg, #f3e3d4 0 12px, #f8efe6 12px 24px);
+  overflow:hidden;
+  display:grid; grid-template-rows:auto 1fr auto;
+  transform-origin: bottom center;
+  opacity:0;
+  transition: transform 1s ease, opacity 1s ease, bottom 1s ease;
 }
 
-/* Animaciones al abrir */
-input[type="checkbox"] {
-  display: none;
+/* Título y texto de la carta */
+.paper h2{
+  font-family:'Dancing Script', cursive;
+  color:#7b57b5; margin:2px 0 6px; font-size: clamp(22px, 3.4vw, 30px);
+}
+.content{
+  text-align: justify;
+  line-height:1.75; font-size: 15px;
+  padding-right:8px; overflow:auto;
+}
+.content[contenteditable="true"]{outline:none}
+.content::-webkit-scrollbar{width:8px}
+.content::-webkit-scrollbar-thumb{background:#e1c7a9;border-radius:8px}
+
+/* firma */
+.sign{ text-align:right; color:#7b57b5; margin:10px 6px 6px; font-style:italic}
+
+/* Estados al abrir */
+#open:checked ~ .scene .glass{ transform: rotate(2deg) translateY(-8px)}
+#open:checked ~ .scene .cork{ transform: translateX(-50%) translateY(-90px) rotate(-6deg)}
+#open:checked ~ .scene .scroll{ transform:translateX(-50%) translateY(-120px) rotate(-2deg)}
+#open:checked ~ .scene .paper{
+  bottom: -10px; opacity:1;
+  transform: translateX(-50%) scale(1);
 }
 
-label {
-  margin: 20px;
-  padding: 12px 26px;
-  border-radius: 50px;
-  background: #b695ff;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-  z-index: 3;
+/* Burbujas marinas sutiles */
+.bubbles span{
+  position:absolute; bottom:-20px;
+  width:16px;height:16px;border-radius:50%;
+  background: #ffffff80; filter: blur(.2px);
+  animation: rise 8s linear infinite;
 }
-label:hover {
-  background: #a679ff;
+@keyframes rise{
+  from{ transform: translateY(0) translateX(0) scale(1); opacity:.6}
+  to{ transform: translateY(-100vh) translateX(40px) scale(.9); opacity:0}
 }
-
-/* abrir */
-#abrir:checked ~ .bottle .cork {
-  transform: translateX(-50%) translateY(-80px);
-}
-#abrir:checked ~ .bottle .letter {
-  bottom: 40px;
-  opacity: 1;
-}
-
-/* carta texto */
-.letter h2 {
-  font-family: 'Dancing Script', cursive;
-  color: #8156b4;
-  margin-top: 0;
-  font-size: 26px;
-}
-.sign {
-  margin-top: 10px;
-  font-style: italic;
-  text-align: right;
-  color: #7a59a0;
-}
-
-/* burbujas */
-.bubble {
-  position: absolute;
-  bottom: -20px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.5);
-  animation: rise 6s infinite ease-in;
-}
-@keyframes rise {
-  0% { transform: translateY(0) scale(1); opacity: 0.4; }
-  100% { transform: translateY(-800px) scale(0.8); opacity: 0; }
-}
-footer {
-  margin-top: 20px;
-  font-size: 12px;
-  opacity: 0.7;
-  z-index: 3;
-}
+footer{margin-top:10px; font-size:12px; opacity:.7}
 </style>
 </head>
-
 <body>
-<h1>Carta en la Botella 💌</h1>
-<p class="subtitle">Un mensaje que viajó por el mar pastel hasta llegar a ti...</p>
 
-<input type="checkbox" id="abrir">
-<label for="abrir">🍾 Abrir / Cerrar la botella</label>
+<input id="open" type="checkbox">
+<div class="scene">
+  <div class="sun"></div>
 
-<div class="bottle">
-  <div class="cork"></div>
-  <div class="letter">
-    <h2>Mi Tesoro Pastel 💜</h2>
-    <p>
-      Esta carta viaja dentro de una botella que el mar pastel trajo hasta ti.  
-      Lleva dentro todas las palabras que mi corazón ha querido decirte estos cinco años.  
-      Has sido mi faro en días nublados, mi calma en las tormentas,  
-      la melodía que acompaña mis días más suaves.
-      <br><br>
-      Si alguna vez sientes dudas o el viento sopla fuerte,  
-      recuerda que mi amor por ti no se hunde, flota, como esta botella que siempre encuentra el camino de regreso a tus manos.
-      <br><br>
-      Gracias por estos años de aventuras, por construir conmigo este viaje color lavanda  
-      donde el amor es el mapa y tú eres mi norte.
-    </p>
-    <p class="sign">Con todo mi amor,  
-    <br><strong>Tu pirata del corazón ⚓💜</strong></p>
+  <h1>Carta en la Botella 💌</h1>
+  <p class="subtitle">Una carta morado-pastel que viajó por el mar para encontrarte…</p>
+  <label class="btn" for="open">🍾 Abrir / Cerrar la botella</label>
+
+  <!-- Botella -->
+  <div class="glass">
+    <div class="bottle">
+      <div class="neck"></div>
+      <div class="cork"></div>
+      <!-- pergamino enrollado visible dentro -->
+      <div class="scroll" aria-hidden="true"></div>
+    </div>
+
+    <!-- carta desplegada fuera de la botella -->
+    <article class="paper" role="document" aria-label="Carta">
+      <h2>Para mi tesoro en la orilla 💜</h2>
+
+      <!-- Escribe aquí: texto largo permitido con scroll -->
+      <div class="content" contenteditable="true" spellcheck="false">
+        Hoy dejo esta carta en tus manos como quien encuentra un mapa del tesoro:
+        cada línea señala un recuerdo, cada palabra guarda una risa, un abrazo, una promesa.
+        <br><br>
+        Cinco años contigo me enseñaron que el amor es paciencia, aventura y casa.
+        Si alguna vez sopla fuerte el viento, recuerda que mi amor flota: como esta botella,
+        siempre vuelve a ti. Gracias por cada día, por lo simple y por lo extraordinario,
+        por construir un “nosotros” que quiero cuidar toda la vida.
+        <br><br>
+        Aquí dejo todo lo que siento —y todavía me queda mucho por escribir…
+      </div>
+
+      <p class="sign">Con todo mi amor,<br><strong>Tu pirata del corazón ⚓</strong></p>
+    </article>
+  </div>
+
+  <!-- playa -->
+  <div class="beach">
+    <div class="wave"></div>
   </div>
 </div>
 
 
-<!-- burbujas flotantes -->
-<div class="bubble" style="left:15%; animation-delay:0s;"></div>
-<div class="bubble" style="left:45%; animation-delay:1.5s;"></div>
-<div class="bubble" style="left:70%; animation-delay:2.2s;"></div>
-<div class="bubble" style="left:30%; animation-delay:3s;"></div>
-<div class="bubble" style="left:85%; animation-delay:1s;"></div>
+<!-- burbujas -->
+<div class="bubbles" aria-hidden="true">
+  <span style="left:12%; animation-delay:0s;"></span>
+  <span style="left:30%; animation-delay:1.2s;"></span>
+  <span style="left:56%; animation-delay:.6s;"></span>
+  <span style="left:72%; animation-delay:2.1s;"></span>
+  <span style="left:88%; animation-delay:.9s;"></span>
+</div>
 
 </body>
 </html>
