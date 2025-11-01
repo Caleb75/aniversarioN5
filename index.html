@@ -1,215 +1,217 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Nuestro Amor 💌</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carta en la Botella 💜</title>
 
-<!-- Fuentes románticas -->
-<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
 :root {
-  --fondo1: #ffe0ec;
-  --fondo2: #c8f3ff;
-  --rosa: #ff4d6d;
-  --rosa-oscuro: #c9184a;
-  --blanco: #fffaf6;
-  --sombra: rgba(0, 0, 0, 0.15);
+  --morado: #cbb2fe;
+  --rosa: #f7b9e7;
+  --azul: #aee6ff;
+  --arena: #fff4e6;
+  --verde: #c8ffd4;
+  --texto: #4a385b;
 }
 
+/* Fondo estilo marino pastel */
 body {
   margin: 0;
-  min-height: 100vh;
+  height: 100vh;
+  font-family: 'Quicksand', sans-serif;
+  color: var(--texto);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at 20% 30%, var(--fondo1), var(--fondo2));
-  font-family: 'Poppins', sans-serif;
-  color: #472a2a;
-  overflow-x: hidden;
-  background-attachment: fixed;
+  background: linear-gradient(160deg, var(--morado) 0%, var(--rosa) 40%, var(--azul) 100%);
+  overflow: hidden;
+  position: relative;
 }
 
-/* título */
+/* Ondas suaves al fondo */
+body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 110%, var(--verde) 0%, transparent 60%),
+              radial-gradient(circle at 80% 100%, var(--arena) 0%, transparent 50%);
+  opacity: 0.6;
+  z-index: 0;
+}
+
+/* Título */
 h1 {
   font-family: 'Dancing Script', cursive;
   font-size: clamp(32px, 6vw, 60px);
-  margin: 10px 0;
-  color: var(--rosa-oscuro);
-  text-shadow: 2px 2px 10px rgba(255, 110, 155, 0.3);
+  color: #5b3fa3;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 10px rgba(90, 60, 130, 0.2);
+  z-index: 2;
 }
 .subtitle {
+  font-size: 16px;
   opacity: 0.8;
-  margin-bottom: 1em;
+  z-index: 2;
 }
 
-/* sobre */
-.container {
+/* Botella */
+.bottle {
   position: relative;
-  width: min(90vw, 480px);
-  height: 340px;
-  perspective: 1000px;
-}
-
-.envelope {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(145deg, #fff1f5, #ffd6e0);
-  border-radius: 8px;
-  box-shadow: 0 12px 30px var(--sombra);
+  width: min(80vw, 420px);
+  height: 500px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 120px / 250px;
+  border: 3px solid rgba(255,255,255,0.4);
+  box-shadow: inset 0 0 40px rgba(255,255,255,0.3),
+              0 20px 60px rgba(0,0,0,0.2);
+  backdrop-filter: blur(10px);
   overflow: hidden;
-  transform-style: preserve-3d;
-  transition: transform 1s ease-in-out;
+  z-index: 2;
+  transition: transform 1s ease;
 }
 
-/* flap (tapa del sobre) */
-.flap {
+/* Tapa */
+.cork {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 50%;
-  background: linear-gradient(to bottom, #ff9eb5, #ff7a96);
-  transform-origin: top;
-  transition: transform 1s ease-in-out;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 30px;
+  background: #a06f50;
+  border-radius: 10px 10px 2px 2px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  transition: transform 1s ease;
   z-index: 3;
 }
 
-/* carta */
+/* Carta */
 .letter {
   position: absolute;
-  width: 85%;
-  height: 80%;
-  top: 10%;
-  left: 7.5%;
-  background: var(--blanco);
-  border-radius: 10px;
-  box-shadow: 0 8px 18px rgba(0,0,0,0.15);
-  padding: 22px;
+  bottom: -300px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 300px;
+  background: var(--arena);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+  background-image: repeating-linear-gradient(160deg, #f3e3d4 0 10px, #f8efe6 10px 20px);
+  background-blend-mode: multiply;
   overflow-y: auto;
-  transform: translateY(40%);
-  opacity: 0;
-  transition: transform 1s ease-in-out, opacity 0.8s ease-in-out;
-}
-
-/* texto carta */
-.letter h2 {
-  font-family: 'Dancing Script', cursive;
-  color: var(--rosa-oscuro);
-  font-size: 26px;
-  margin-top: 0;
-}
-.letter p {
   font-size: 15px;
-  line-height: 1.7;
-  text-align: justify;
-}
-.sign {
-  text-align: right;
-  font-style: italic;
-  color: var(--rosa-oscuro);
-  margin-top: 10px;
+  line-height: 1.6;
+  opacity: 0;
+  transition: bottom 1s ease, opacity 1s ease;
 }
 
-/* Abrir */
+/* Animaciones al abrir */
 input[type="checkbox"] {
   display: none;
 }
+
 label {
-  cursor: pointer;
-  display: inline-block;
-  margin: 12px 8px;
-  padding: 12px 22px;
+  margin: 20px;
+  padding: 12px 26px;
   border-radius: 50px;
-  background: var(--rosa);
+  background: #b695ff;
   color: white;
   font-weight: 600;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+  cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  z-index: 3;
 }
 label:hover {
-  background: var(--rosa-oscuro);
-  transform: translateY(-2px);
+  background: #a679ff;
 }
 
-/* efecto abrir */
-#abrir:checked ~ .container .flap {
-  transform: rotateX(-160deg);
+/* abrir */
+#abrir:checked ~ .bottle .cork {
+  transform: translateX(-50%) translateY(-80px);
 }
-#abrir:checked ~ .container .letter {
-  transform: translateY(-10%);
+#abrir:checked ~ .bottle .letter {
+  bottom: 40px;
   opacity: 1;
 }
 
-/* corazones flotantes */
-.hearts span {
-  position: absolute;
-  font-size: 20px;
-  color: var(--rosa);
-  animation: float 6s linear infinite;
+/* carta texto */
+.letter h2 {
+  font-family: 'Dancing Script', cursive;
+  color: #8156b4;
+  margin-top: 0;
+  font-size: 26px;
 }
-@keyframes float {
-  0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-  20% { opacity: 1; }
-  100% { transform: translateY(-600px) rotate(360deg); opacity: 0; }
-}
-footer {
-  margin-top: 30px;
-  font-size: 12px;
-  opacity: 0.6;
+.sign {
+  margin-top: 10px;
+  font-style: italic;
+  text-align: right;
+  color: #7a59a0;
 }
 
-/* scroll suave */
-.letter::-webkit-scrollbar {
-  width: 6px;
+/* burbujas */
+.bubble {
+  position: absolute;
+  bottom: -20px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  animation: rise 6s infinite ease-in;
 }
-.letter::-webkit-scrollbar-thumb {
-  background: #ff9bb8;
-  border-radius: 6px;
+@keyframes rise {
+  0% { transform: translateY(0) scale(1); opacity: 0.4; }
+  100% { transform: translateY(-800px) scale(0.8); opacity: 0; }
+}
+footer {
+  margin-top: 20px;
+  font-size: 12px;
+  opacity: 0.7;
+  z-index: 3;
 }
 </style>
 </head>
 
 <body>
-<h1>Mi Carta para Ti 💖</h1>
-<p class="subtitle">Cinco años y cada día te amo más. Toca el sobre...</p>
+<h1>Carta en la Botella 💌</h1>
+<p class="subtitle">Un mensaje que viajó por el mar pastel hasta llegar a ti...</p>
 
 <input type="checkbox" id="abrir">
-<label for="abrir">💌 Abrir / Cerrar el sobre</label>
+<label for="abrir">🍾 Abrir / Cerrar la botella</label>
 
-<div class="container">
-  <div class="envelope">
-    <div class="flap"></div>
-    <div class="letter">
-      <h2>Para Mi Persona Favorita 💫</h2>
-      <p>
-        Hoy se cumplen cinco años desde que nuestras vidas se cruzaron de la forma más bonita posible.
-        Cinco años de risas, de aprendizajes, de noches interminables hablando de todo y de nada.
-        A tu lado aprendí que el amor no es solo decir “te amo”, sino demostrarlo en los detalles,
-        en la paciencia, en el apoyo silencioso y en las miradas que lo dicen todo.<br><br>
-        Eres mi calma y mi locura, mi refugio y mi impulso. Gracias por ser tú, por elegirme cada día
-        incluso cuando no es fácil, y por seguir construyendo este “nosotros” que tanto amo.
-        <br><br>
-        No hay palabras suficientes para expresar lo feliz que me haces, pero si tuviera que resumirlo:
-        tú eres mi hogar. ❤️
-      </p>
-      <p class="sign">Con amor infinito,<br><strong>Tu amor eterno 💋</strong></p>
-    </div>
+<div class="bottle">
+  <div class="cork"></div>
+  <div class="letter">
+    <h2>Mi Tesoro Pastel 💜</h2>
+    <p>
+      Esta carta viaja dentro de una botella que el mar pastel trajo hasta ti.  
+      Lleva dentro todas las palabras que mi corazón ha querido decirte estos cinco años.  
+      Has sido mi faro en días nublados, mi calma en las tormentas,  
+      la melodía que acompaña mis días más suaves.
+      <br><br>
+      Si alguna vez sientes dudas o el viento sopla fuerte,  
+      recuerda que mi amor por ti no se hunde, flota, como esta botella que siempre encuentra el camino de regreso a tus manos.
+      <br><br>
+      Gracias por estos años de aventuras, por construir conmigo este viaje color lavanda  
+      donde el amor es el mapa y tú eres mi norte.
+    </p>
+    <p class="sign">Con todo mi amor,  
+    <br><strong>Tu pirata del corazón ⚓💜</strong></p>
   </div>
 </div>
 
-<footer>Hecho con 💕 solo con HTML + CSS | Dedicado a ti</footer>
 
-<div class="hearts">
-  <span style="left:10%; animation-delay:0s;">💖</span>
-  <span style="left:30%; animation-delay:2s;">💞</span>
-  <span style="left:50%; animation-delay:1s;">💘</span>
-  <span style="left:70%; animation-delay:3s;">💓</span>
-  <span style="left:85%; animation-delay:1.5s;">💗</span>
-</div>
+<!-- burbujas flotantes -->
+<div class="bubble" style="left:15%; animation-delay:0s;"></div>
+<div class="bubble" style="left:45%; animation-delay:1.5s;"></div>
+<div class="bubble" style="left:70%; animation-delay:2.2s;"></div>
+<div class="bubble" style="left:30%; animation-delay:3s;"></div>
+<div class="bubble" style="left:85%; animation-delay:1s;"></div>
 
 </body>
 </html>
