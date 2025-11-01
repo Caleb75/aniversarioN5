@@ -1,341 +1,215 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Nuestro Sobre de Amor 💌</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nuestro Amor 💌</title>
 
-  <!-- Tipografías -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<!-- Fuentes románticas -->
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
-  <style>
-    :root{
-      /* Paleta romántica */
-      --bg1:#ffdee9;
-      --bg2:#b5fffc;
-      --accent:#ff4971;
-      --accent-dark:#cc3b5c;
-      --ink:#352a2a;
-      --paper:#fffaf3;
-      --shadow: rgba(0,0,0,.15);
+<style>
+:root {
+  --fondo1: #ffe0ec;
+  --fondo2: #c8f3ff;
+  --rosa: #ff4d6d;
+  --rosa-oscuro: #c9184a;
+  --blanco: #fffaf6;
+  --sombra: rgba(0, 0, 0, 0.15);
+}
 
-      /* Dimensiones */
-      --env-w: min(86vw, 560px);
-      --env-h: calc(var(--env-w) * 0.66);
-      --radius: 14px;
-      --gap: 18px;
-    }
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 20% 30%, var(--fondo1), var(--fondo2));
+  font-family: 'Poppins', sans-serif;
+  color: #472a2a;
+  overflow-x: hidden;
+  background-attachment: fixed;
+}
 
-    /* Reset suave */
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      color:var(--ink);
-      background: radial-gradient(1200px 800px at 20% 10%, #ffeef3 0%, transparent 60%),
-                  radial-gradient(900px 700px at 80% 20%, #e9fbff 0%, transparent 55%),
-                  linear-gradient(135deg,var(--bg1),var(--bg2));
-      font-family: Poppins, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      display:grid;
-      place-items:center;
-      overflow-x:hidden;
-    }
+/* título */
+h1 {
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(32px, 6vw, 60px);
+  margin: 10px 0;
+  color: var(--rosa-oscuro);
+  text-shadow: 2px 2px 10px rgba(255, 110, 155, 0.3);
+}
+.subtitle {
+  opacity: 0.8;
+  margin-bottom: 1em;
+}
 
-    /* Burbujas sutiles de fondo */
-    .bokeh{
-      position:fixed; inset:0; pointer-events:none; overflow:hidden;
-      filter: blur(2px) saturate(1.1);
-    }
-    .bokeh span{
-      position:absolute; border-radius:50%;
-      background:rgba(255,255,255,.25);
-      animation: float 12s linear infinite;
-      box-shadow: 0 4px 12px rgba(255,255,255,.35) inset;
-    }
-    @keyframes float{
-      from{ transform: translateY(20vh) translateX(0) scale(1); opacity:.0;}
-      10%{opacity:.55;}
-      50%{transform: translateY(-20vh) translateX(4vw) scale(1.1);}
-      to{ transform: translateY(-60vh) translateX(8vw) scale(1.15); opacity:.0;}
-    }
+/* sobre */
+.container {
+  position: relative;
+  width: min(90vw, 480px);
+  height: 340px;
+  perspective: 1000px;
+}
 
-    /* Contenedor principal */
-    .wrap{
-      width: min(94vw, 760px);
-      display:grid;
-      gap:var(--gap);
-      justify-items:center;
-      padding: 32px 16px 64px;
-      text-align:center;
-      position:relative;
-    }
-    h1{
-      font-family: "Playfair Display", serif;
-      font-weight:700;
-      margin:0;
-      font-size: clamp(28px, 4.5vw, 44px);
-      letter-spacing:.5px;
-    }
-    .subtitle{
-      margin-top:6px;
-      font-size: clamp(14px, 2.5vw, 16px);
-      opacity:.8;
-    }
+.envelope {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(145deg, #fff1f5, #ffd6e0);
+  border-radius: 8px;
+  box-shadow: 0 12px 30px var(--sombra);
+  overflow: hidden;
+  transform-style: preserve-3d;
+  transition: transform 1s ease-in-out;
+}
 
-    /* Distintivo 5 años */
-    .ribbon{
-      position:absolute;
-      top:10px; right:10px;
-      background: linear-gradient(180deg, var(--accent), var(--accent-dark));
-      color:white;
-      padding:8px 14px;
-      border-radius: 999px;
-      font-weight:600;
-      font-size:14px;
-      box-shadow: 0 8px 20px rgba(255,73,113,.35);
-    }
+/* flap (tapa del sobre) */
+.flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(to bottom, #ff9eb5, #ff7a96);
+  transform-origin: top;
+  transition: transform 1s ease-in-out;
+  z-index: 3;
+}
 
-    /* Control para abrir/cerrar (checkbox hack) */
-    #open{
-      position:absolute; left:-9999px; opacity:0;
-    }
-    .btns{
-      display:flex; gap:12px; margin-top:4px;
-    }
-    .btn{
-      appearance:none; border:none; cursor:pointer;
-      background: white;
-      color:var(--accent-dark);
-      font-weight:700;
-      padding:12px 18px;
-      border-radius: 999px;
-      box-shadow: 0 8px 22px var(--shadow);
-      transition: transform .15s ease, box-shadow .2s ease, background .2s ease, color .2s ease;
-      text-decoration:none;
-      display:inline-flex; align-items:center; gap:8px;
-    }
-    .btn:hover{ transform: translateY(-2px); box-shadow: 0 12px 26px rgba(0,0,0,.18); }
-    .btn:active{ transform: translateY(0); box-shadow: 0 6px 14px rgba(0,0,0,.18); }
-    .btn--primary{
-      background: linear-gradient(180deg, var(--accent), var(--accent-dark));
-      color:white;
-    }
+/* carta */
+.letter {
+  position: absolute;
+  width: 85%;
+  height: 80%;
+  top: 10%;
+  left: 7.5%;
+  background: var(--blanco);
+  border-radius: 10px;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+  padding: 22px;
+  overflow-y: auto;
+  transform: translateY(40%);
+  opacity: 0;
+  transition: transform 1s ease-in-out, opacity 0.8s ease-in-out;
+}
 
-    /* Sobre */
-    .stage{
-      width:var(--env-w); height:var(--env-h);
-      perspective: 1400px;
-      position:relative;
-    }
-    .envelope{
-      width:100%; height:100%;
-      position:relative;
-      transform-style: preserve-3d;
-      transition: transform .9s cubic-bezier(.2,.85,.18,1);
-      filter: drop-shadow(0 24px 28px rgba(0,0,0,.18));
-    }
+/* texto carta */
+.letter h2 {
+  font-family: 'Dancing Script', cursive;
+  color: var(--rosa-oscuro);
+  font-size: 26px;
+  margin-top: 0;
+}
+.letter p {
+  font-size: 15px;
+  line-height: 1.7;
+  text-align: justify;
+}
+.sign {
+  text-align: right;
+  font-style: italic;
+  color: var(--rosa-oscuro);
+  margin-top: 10px;
+}
 
-    /* Fondo del sobre */
-    .back{
-      position:absolute; inset:0;
-      border-radius: var(--radius);
-      background:
-        linear-gradient(180deg,#fff 0%, #f7f2f0 100%);
-      border:1px solid #eadfdb;
-    }
+/* Abrir */
+input[type="checkbox"] {
+  display: none;
+}
+label {
+  cursor: pointer;
+  display: inline-block;
+  margin: 12px 8px;
+  padding: 12px 22px;
+  border-radius: 50px;
+  background: var(--rosa);
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+label:hover {
+  background: var(--rosa-oscuro);
+  transform: translateY(-2px);
+}
 
-    /* Solapas y caras del sobre construidas con pseudo-elementos */
-    .back::before, .back::after{
-      content:""; position:absolute; inset:0; border-radius:var(--radius);
-      background: conic-gradient(from 45deg at 0% 100%, #ffd6e3 0 25%, transparent 0 100%),
-                  conic-gradient(from -45deg at 100% 100%, #ffd6e3 0 25%, transparent 0 100%),
-                  conic-gradient(from 135deg at 0% 0%, #ffd6e3 0 25%, transparent 0 100%),
-                  conic-gradient(from -135deg at 100% 0%, #ffd6e3 0 25%, transparent 0 100%);
-      opacity:.18;
-      mask: radial-gradient(160% 120% at 50% 100%, #000 55%, transparent 56%);
-    }
-    .flap{
-      position:absolute;
-      left:0; right:0; top:0; height:52%;
-      transform-origin: top;
-      transform: rotateX(0deg);
-      transition: transform .9s cubic-bezier(.2,.85,.18,1);
-      border-top-left-radius: var(--radius); border-top-right-radius: var(--radius);
-      background: linear-gradient(180deg, #ffe6ee, #ffc1d0);
-      border:1px solid #e8b2c0; border-bottom:none;
-      box-shadow: 0 8px 12px rgba(0,0,0,.06) inset;
-    }
-    .flap::after{
-      content:"";
-      position:absolute; inset:0;
-      background: radial-gradient(90% 60% at 50% 10%, rgba(255,255,255,.85), transparent 70%);
-      border-top-left-radius: var(--radius); border-top-right-radius: var(--radius);
-    }
+/* efecto abrir */
+#abrir:checked ~ .container .flap {
+  transform: rotateX(-160deg);
+}
+#abrir:checked ~ .container .letter {
+  transform: translateY(-10%);
+  opacity: 1;
+}
 
-    /* Carta */
-    .letter{
-      position:absolute; left:6%; right:6%; top:14%;
-      height: 72%;
-      background: var(--paper);
-      border-radius: 12px;
-      border:1px solid #efe7dc;
-      box-shadow: 0 16px 24px rgba(0,0,0,.08);
-      padding: clamp(16px, 2.8vw, 28px);
-      transform: translateY(16%) translateZ(10px);
-      transition: transform .9s cubic-bezier(.2,.85,.18,1), box-shadow .9s;
-      overflow:hidden;
-    }
-    .letter::before{
-      content:"";
-      position:absolute; inset:0;
-      background: repeating-linear-gradient(90deg, #ffd6df 0 14px, transparent 14px 22px),
-                  repeating-linear-gradient(0deg, #b3ecff 0 14px, transparent 14px 22px);
-      opacity:.14; pointer-events:none;
-    }
+/* corazones flotantes */
+.hearts span {
+  position: absolute;
+  font-size: 20px;
+  color: var(--rosa);
+  animation: float 6s linear infinite;
+}
+@keyframes float {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateY(-600px) rotate(360deg); opacity: 0; }
+}
+footer {
+  margin-top: 30px;
+  font-size: 12px;
+  opacity: 0.6;
+}
 
-    /* Contenido de la carta */
-    .dear{
-      font-family: "Playfair Display", serif;
-      font-size: clamp(18px, 3vw, 22px);
-      margin: 0 0 8px;
-    }
-    .names{ font-weight:600; }
-    .msg{
-      margin: 10px 0 14px;
-      text-align:left;
-      line-height:1.65;
-      font-size: clamp(14px, 2.5vw, 16px);
-      outline:none; /* para contenteditable */
-    }
-    .sign{
-      display:flex; justify-content:space-between; align-items:center; gap:10px;
-      margin-top: 12px;
-      font-size: clamp(12px, 2vw, 14px);
-      opacity:.75;
-    }
-    .heart{
-      display:inline-block;
-      transform: translateY(2px);
-      font-size: 18px;
-    }
-
-    /* Interacción al abrir */
-    #open:checked ~ .stage .envelope{
-      transform: translateY(-8px) rotateX(10deg) rotateY(0deg);
-    }
-    #open:checked ~ .stage .flap{
-      transform: rotateX(-160deg);
-      box-shadow: 0 18px 24px rgba(0,0,0,.18);
-    }
-    #open:checked ~ .stage .letter{
-      transform: translateY(-24%) translateZ(16px);
-      box-shadow: 0 28px 40px rgba(0,0,0,.22);
-    }
-
-    /* Confeti de corazones */
-    .hearts{
-      position:fixed; inset:0; pointer-events:none; overflow:hidden;
-      z-index: 5;
-    }
-    .hearts span{
-      position:absolute;
-      font-size: clamp(16px, 3.2vw, 28px);
-      animation: pop 6s linear infinite;
-      opacity:.0;
-      will-change: transform, opacity;
-      filter: drop-shadow(0 6px 10px rgba(0,0,0,.2));
-    }
-    @keyframes pop{
-      0%   { transform: translateY(10vh) translateX(0) rotate(0deg) scale(.9); opacity:0;}
-      8%   { opacity:1;}
-      50%  { transform: translateY(-40vh) translateX(-6vw) rotate(40deg) scale(1.05); }
-      100% { transform: translateY(-90vh) translateX(8vw) rotate(120deg); opacity:0; }
-    }
-
-    /* Footer */
-    footer{
-      margin-top:8px;
-      font-size:12px;
-      opacity:.6;
-    }
-
-    /* Accesibilidad y estados de foco */
-    .btn:focus-visible{
-      outline: 3px solid #2222;
-      box-shadow: 0 0 0 4px rgba(255,73,113,.35), 0 8px 22px var(--shadow);
-    }
-
-    /* Responsive afinado */
-    @media (max-width:520px){
-      .sign{flex-direction:column; align-items:flex-start;}
-    }
-  </style>
+/* scroll suave */
+.letter::-webkit-scrollbar {
+  width: 6px;
+}
+.letter::-webkit-scrollbar-thumb {
+  background: #ff9bb8;
+  border-radius: 6px;
+}
+</style>
 </head>
+
 <body>
+<h1>Mi Carta para Ti 💖</h1>
+<p class="subtitle">Cinco años y cada día te amo más. Toca el sobre...</p>
 
-  <!-- Burbujas sutiles -->
-  <div class="bokeh">
-    <!-- tamaño, posición y duración variadas -->
-    <span style="width:120px;height:120px;left:8%;bottom:-10%;animation-duration:15s;"></span>
-    <span style="width:80px;height:80px;left:70%;bottom:-12%;animation-duration:13s;animation-delay:1s;"></span>
-    <span style="width:140px;height:140px;left:50%;bottom:-14%;animation-duration:18s;animation-delay:.5s;"></span>
-    <span style="width:60px;height:60px;left:22%;bottom:-16%;animation-duration:12s;animation-delay:2s;"></span>
-  </div>
+<input type="checkbox" id="abrir">
+<label for="abrir">💌 Abrir / Cerrar el sobre</label>
 
-  <!-- Corazones flotantes -->
-  <div class="hearts" aria-hidden="true">
-    <!-- Varios corazones con distintas demoras -->
-    <span style="left:12%; bottom:-5%; animation-delay:.0s;">💖</span>
-    <span style="left:26%; bottom:-8%; animation-delay:1.2s;">💘</span>
-    <span style="left:38%; bottom:-7%; animation-delay:2.4s;">💞</span>
-    <span style="left:52%; bottom:-6%; animation-delay:.8s;">💝</span>
-    <span style="left:64%; bottom:-9%; animation-delay:1.8s;">💓</span>
-    <span style="left:78%; bottom:-10%; animation-delay:.4s;">💗</span>
-    <span style="left:88%; bottom:-12%; animation-delay:2.1s;">💟</span>
-  </div>
-
-  <div class="wrap">
-    <span class="ribbon">5 Años 💫</span> <!-- EDITA AQUÍ si quieres -->
-
-    <h1>Un sobre para ti</h1>
-    <p class="subtitle">He guardado aquí lo que siento por ti. Toca para abrirlo. ✨</p>
-
-    <!-- Control abrir/cerrar -->
-    <input id="open" type="checkbox" aria-label="Abrir el sobre">
-    <div class="btns" role="group" aria-label="Controles del sobre">
-      <label class="btn btn--primary" for="open">💌 Abrir el sobre</label>
-      <label class="btn" for="open">Cerrar</label>
+<div class="container">
+  <div class="envelope">
+    <div class="flap"></div>
+    <div class="letter">
+      <h2>Para Mi Persona Favorita 💫</h2>
+      <p>
+        Hoy se cumplen cinco años desde que nuestras vidas se cruzaron de la forma más bonita posible.
+        Cinco años de risas, de aprendizajes, de noches interminables hablando de todo y de nada.
+        A tu lado aprendí que el amor no es solo decir “te amo”, sino demostrarlo en los detalles,
+        en la paciencia, en el apoyo silencioso y en las miradas que lo dicen todo.<br><br>
+        Eres mi calma y mi locura, mi refugio y mi impulso. Gracias por ser tú, por elegirme cada día
+        incluso cuando no es fácil, y por seguir construyendo este “nosotros” que tanto amo.
+        <br><br>
+        No hay palabras suficientes para expresar lo feliz que me haces, pero si tuviera que resumirlo:
+        tú eres mi hogar. ❤️
+      </p>
+      <p class="sign">Con amor infinito,<br><strong>Tu amor eterno 💋</strong></p>
     </div>
-
-    <!-- Escenario del sobre -->
-    <div class="stage" aria-live="polite">
-      <div class="envelope" aria-label="Sobre con carta de amor">
-        <div class="back"></div>
-        <div class="flap" aria-hidden="true"></div>
-
-        <article class="letter" role="document" aria-label="Carta">
-          <h2 class="dear">Para <span class="names">Mi Persona Especial</span> <!-- EDITA AQUÍ nombres --></h2>
-
-          <p class="msg" contenteditable="true" spellcheck="false" aria-label="Escribe tu mensaje aquí">
-            <!-- EDITA AQUÍ tu mensaje si prefieres dejarlo fijo en el HTML -->
-            Gracias por estos 5 años llenos de risas, aprendizajes y amor. Eres mi lugar favorito,
-            mi compañerx de aventuras y el corazón que me acompasa. Hoy, mañana y siempre… te elijo.
-            <br><br>
-            Con todo mi amor, <strong>Tu amor</strong>.
-          </p>
-
-          <div class="sign">
-            <span>📍 <em>Nuestra historia</em></span>
-            <span>📅 <!-- EDITA AQUÍ fecha --> 31 · Oct · 2025</span>
-            <span class="heart">❤️</span>
-          </div>
-        </article>
-      </div>
-    </div>
-
-    <footer>
-      Hecho con HTML + CSS · Puedes editar nombres, fecha y mensaje en el archivo.
-    </footer>
   </div>
+</div>
+
+<footer>Hecho con 💕 solo con HTML + CSS | Dedicado a ti</footer>
+
+<div class="hearts">
+  <span style="left:10%; animation-delay:0s;">💖</span>
+  <span style="left:30%; animation-delay:2s;">💞</span>
+  <span style="left:50%; animation-delay:1s;">💘</span>
+  <span style="left:70%; animation-delay:3s;">💓</span>
+  <span style="left:85%; animation-delay:1.5s;">💗</span>
+</div>
+
 </body>
 </html>
