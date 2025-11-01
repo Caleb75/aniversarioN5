@@ -13,6 +13,13 @@
 }
 *{box-sizing:border-box}
 html,body{height:100%}
+
+/* ===== FIX temblor: scroll estable ===== */
+html{
+  overflow-y: scroll;
+  scrollbar-gutter: stable both-edges;
+}
+
 body{
   margin:0; font-family:Quicksand,system-ui,sans-serif; color:var(--tinta);
   display:grid; place-items:center; overflow-x:hidden; background-attachment:fixed;
@@ -20,6 +27,8 @@ body{
     radial-gradient(80vw 60vh at 20% 15%, #e7d7ff 0, transparent 60%),
     radial-gradient(60vw 50vh at 85% 10%, #ffd4ec 0, transparent 60%),
     linear-gradient(160deg, var(--morado) 0%, var(--rosa) 40%, var(--azul) 100%);
+  min-height:100vh;
+  overscroll-behavior: contain;
 }
 
 /* Escena */
@@ -50,10 +59,8 @@ h1{ font-family:'Dancing Script',cursive; font-size:clamp(36px,7vw,66px); color:
 /* === PLAYA FIJA (cubre toda la parte inferior) === */
 .beach{
   position:fixed; left:0; right:0; bottom:0;
-  /* top define dónde empieza la playa: ajusta 50–62vh a tu gusto */
   top: clamp(420px, 56vh, 62vh);
   z-index:-1;
-  /* de abajo (arena) hacia arriba (mar) */
   background: linear-gradient(0deg, var(--arena) 0 46%, #dff8ff 46% 100%);
 }
 .wave{
@@ -65,15 +72,13 @@ h1{ font-family:'Dancing Script',cursive; font-size:clamp(36px,7vw,66px); color:
 
 /* BOTELLA */
 .glass{
-  position:relative;
-  margin:10px auto 0;
-  width:min(78vw,460px);
-  height:520px;
+  position:relative; margin:10px auto 0; width:min(78vw,460px); height:520px;
   filter:drop-shadow(0 30px 40px rgba(0,0,0,.25));
   transform-origin:center bottom;
-  transform: translateY(0);             /* sin rotate() */
-  transition: transform 600ms ease;     /* más rápida y suave */
+  transform: translateY(0); /* sin rotaciones para evitar bamboleo */
+  transition: transform 1s ease;
   will-change: transform;
+  backface-visibility: hidden;
 }
 .bottle{
   position:absolute; inset:0; border-radius:120px / 260px;
@@ -103,24 +108,41 @@ h1{ font-family:'Dancing Script',cursive; font-size:clamp(36px,7vw,66px); color:
 
 /* PERGAMINO enrollado dentro */
 .scroll{
-  position:absolute; bottom:70px; left:50%;
-  transform:translateX(-50%) translateY(0); /* estado cerrado */
-  transition: transform 600ms ease;
+  position:absolute; bottom:70px; left:50%; transform:translateX(-50%) translateY(0);
+  width:72%; height:180px; opacity:.95; border-radius:10px;
+  background:
+    radial-gradient(30px 40px at 3% 50%, #f3e3d4 60%, #e8d6c3 61% 68%, transparent 69%) no-repeat,
+    radial-gradient(30px 40px at 97% 50%, #f3e3d4 60%, #e8d6c3 61% 68%, transparent 69%) no-repeat,
+    repeating-linear-gradient(0deg,#f6e9da 0 10px,#f2e3d4 10px 20px);
+  background-size:60px 110%, 60px 110%, 100% 100%;
+  background-position:left center, right center, center;
+  box-shadow:0 8px 14px rgba(0,0,0,.2);
+  transition: transform 1s ease;
   will-change: transform;
+  backface-visibility: hidden;
 }
 
 /* CARTA desplegada */
 .paper{
-  position:absolute; left:50%; bottom:-10px;           /* fijo siempre */
-  transform-origin: bottom center;
-  transform: translateX(-50%) translateY(240px) scale(.96); /* cerrado */
-  opacity: 0;
-  transition: transform 650ms ease, opacity 500ms ease;
+  position:absolute; left:50%; bottom:-10px; transform-origin:bottom center;
+  /* cerrada: fuera de vista solo con translate (ancho y bottom fijos) */
+  transform: translateX(-50%) translateY(240px) scale(.95);
+  width:min(820px,90vw); max-height:46vh; padding:22px 18px 16px;
+  background:var(--arena); border:2px solid #ead8c8; border-radius:8px;
+  -webkit-mask:
+    radial-gradient(20px 26px at 0% 10%, transparent 40%, #000 41%) 0 0 / 60px 60px repeat-x,
+    radial-gradient(20px 26px at 100% 90%, transparent 40%, #000 41%) 0 100%/60px 60px repeat-x,
+    linear-gradient(#000,#000);
+  mask:
+    radial-gradient(20px 26px at 0% 10%, transparent 40%, #000 41%) 0 0 / 60px 60px repeat-x,
+    radial-gradient(20px 26px at 100% 90%, transparent 40%, #000 41%) 0 100%/60px 60px repeat-x,
+    linear-gradient(#000,#000);
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
+  background-image: repeating-linear-gradient(160deg,#f3e3d4 0 12px,#f8efe6 12px 24px);
+  display:grid; grid-template-rows:auto 1fr auto; overflow:hidden; opacity:0;
+  transition: transform 1s ease, opacity 1s ease;
   will-change: transform, opacity;
-
-  /* ancho estable (evita “brinco” por vw cuando aparece el scroll) */
-  width: min(760px, 92vw);
-  max-height: 46vh;
+  backface-visibility: hidden;
 }
 .paper h2{ font-family:'Dancing Script',cursive; color:#7b57b5; margin:2px 0 6px;
            font-size:clamp(22px,3.4vw,30px); }
@@ -129,12 +151,11 @@ h1{ font-family:'Dancing Script',cursive; font-size:clamp(36px,7vw,66px); color:
 .content::-webkit-scrollbar{ width:8px } .content::-webkit-scrollbar-thumb{ background:#e1c7a9; border-radius:8px }
 .sign{ text-align:right; color:#7b57b5; margin:10px 6px 6px; font-style:italic }
 
-/* Estado ABIERTO: sin rotaciones laterales */
-/* 6) Estados abiertos: solo transforms, nada de cambiar bottom/width */
-#open:checked ~ .scene .glass  { transform: translateY(-8px); }
-#open:checked ~ .scene .cork   { transform: translateX(-50%) translateY(-90px) rotate(-6deg); }
-#open:checked ~ .scene .scroll { transform: translateX(-50%) translateY(-120px); }
-#open:checked ~ .scene .paper  { transform: translateX(-50%) translateY(0) scale(1); opacity: 1; }
+/* Estado ABIERTO: solo transforms (sin cambiar bottom/ancho) */
+#open:checked ~ .scene .glass{ transform: translateY(-8px); }
+#open:checked ~ .scene .cork{ transform: translateX(-50%) translateY(-90px) rotate(-6deg); }
+#open:checked ~ .scene .scroll{ transform: translateX(-50%) translateY(-120px); }
+#open:checked ~ .scene .paper{ transform: translateX(-50%) translateY(0) scale(1); opacity:1; }
 
 /* Burbujas decorativas */
 .bubbles span{
@@ -188,6 +209,7 @@ footer{ margin-top:10px; font-size:12px; opacity:.7 }
   </div>
 </div>
 
+<footer>HTML + CSS · Morado pastel · Estilo playa con botella y pergamino</footer>
 
 <!-- burbujas -->
 <div class="bubbles" aria-hidden="true">
@@ -199,7 +221,4 @@ footer{ margin-top:10px; font-size:12px; opacity:.7 }
 </div>
 
 </body>
-  <audio controls autoplay loop>
-  <source src="ruta-de-la-cancion.mp3" type="audio/mpeg">
-</audio>
 </html>
