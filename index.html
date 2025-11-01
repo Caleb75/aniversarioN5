@@ -65,11 +65,15 @@ h1{ font-family:'Dancing Script',cursive; font-size:clamp(36px,7vw,66px); color:
 
 /* BOTELLA */
 .glass{
-  position:relative; margin:10px auto 0; width:min(78vw,460px); height:520px;
+  position:relative;
+  margin:10px auto 0;
+  width:min(78vw,460px);
+  height:520px;
   filter:drop-shadow(0 30px 40px rgba(0,0,0,.25));
   transform-origin:center bottom;
-  transform: translateY(0);           /* ← sin rotaciones para evitar bamboleo */
-  transition: transform 1s ease;
+  transform: translateY(0);             /* sin rotate() */
+  transition: transform 600ms ease;     /* más rápida y suave */
+  will-change: transform;
 }
 .bottle{
   position:absolute; inset:0; border-radius:120px / 260px;
@@ -99,36 +103,24 @@ h1{ font-family:'Dancing Script',cursive; font-size:clamp(36px,7vw,66px); color:
 
 /* PERGAMINO enrollado dentro */
 .scroll{
-  position:absolute; bottom:70px; left:50%; transform:translateX(-50%);
-  width:72%; height:180px; opacity:.95; border-radius:10px;
-  background:
-    radial-gradient(30px 40px at 3% 50%, #f3e3d4 60%, #e8d6c3 61% 68%, transparent 69%) no-repeat,
-    radial-gradient(30px 40px at 97% 50%, #f3e3d4 60%, #e8d6c3 61% 68%, transparent 69%) no-repeat,
-    repeating-linear-gradient(0deg,#f6e9da 0 10px,#f2e3d4 10px 20px);
-  background-size:60px 110%, 60px 110%, 100% 100%;
-  background-position:left center, right center, center;
-  box-shadow:0 8px 14px rgba(0,0,0,.2);
-  transition: transform 1s ease;
+  position:absolute; bottom:70px; left:50%;
+  transform:translateX(-50%) translateY(0); /* estado cerrado */
+  transition: transform 600ms ease;
+  will-change: transform;
 }
 
 /* CARTA desplegada */
 .paper{
-  position:absolute; left:50%; bottom:-260px; transform-origin:bottom center;
-  transform: translateX(-50%) scale(.95); /* ← siempre centrada */
-  width:min(820px,90vw); max-height:46vh; padding:22px 18px 16px;
-  background:var(--arena); border:2px solid #ead8c8; border-radius:8px;
-  -webkit-mask:
-    radial-gradient(20px 26px at 0% 10%, transparent 40%, #000 41%) 0 0 / 60px 60px repeat-x,
-    radial-gradient(20px 26px at 100% 90%, transparent 40%, #000 41%) 0 100%/60px 60px repeat-x,
-    linear-gradient(#000,#000);
-  mask:
-    radial-gradient(20px 26px at 0% 10%, transparent 40%, #000 41%) 0 0 / 60px 60px repeat-x,
-    radial-gradient(20px 26px at 100% 90%, transparent 40%, #000 41%) 0 100%/60px 60px repeat-x,
-    linear-gradient(#000,#000);
-  box-shadow:0 10px 30px rgba(0,0,0,.25);
-  background-image: repeating-linear-gradient(160deg,#f3e3d4 0 12px,#f8efe6 12px 24px);
-  display:grid; grid-template-rows:auto 1fr auto; overflow:hidden; opacity:0;
-  transition: transform 1s ease, opacity 1s ease, bottom 1s ease;
+  position:absolute; left:50%; bottom:-10px;           /* fijo siempre */
+  transform-origin: bottom center;
+  transform: translateX(-50%) translateY(240px) scale(.96); /* cerrado */
+  opacity: 0;
+  transition: transform 650ms ease, opacity 500ms ease;
+  will-change: transform, opacity;
+
+  /* ancho estable (evita “brinco” por vw cuando aparece el scroll) */
+  width: min(760px, 92vw);
+  max-height: 46vh;
 }
 .paper h2{ font-family:'Dancing Script',cursive; color:#7b57b5; margin:2px 0 6px;
            font-size:clamp(22px,3.4vw,30px); }
@@ -138,10 +130,11 @@ h1{ font-family:'Dancing Script',cursive; font-size:clamp(36px,7vw,66px); color:
 .sign{ text-align:right; color:#7b57b5; margin:10px 6px 6px; font-style:italic }
 
 /* Estado ABIERTO: sin rotaciones laterales */
-#open:checked ~ .scene .glass{ transform: translateY(-8px); }
-#open:checked ~ .scene .cork{ transform: translateX(-50%) translateY(-90px) rotate(-6deg); }
-#open:checked ~ .scene .scroll{ transform: translateX(-50%) translateY(-120px); }
-#open:checked ~ .scene .paper{ bottom:-10px; opacity:1; transform: translateX(-50%) scale(1); }
+/* 6) Estados abiertos: solo transforms, nada de cambiar bottom/width */
+#open:checked ~ .scene .glass  { transform: translateY(-8px); }
+#open:checked ~ .scene .cork   { transform: translateX(-50%) translateY(-90px) rotate(-6deg); }
+#open:checked ~ .scene .scroll { transform: translateX(-50%) translateY(-120px); }
+#open:checked ~ .scene .paper  { transform: translateX(-50%) translateY(0) scale(1); opacity: 1; }
 
 /* Burbujas decorativas */
 .bubbles span{
@@ -206,4 +199,7 @@ footer{ margin-top:10px; font-size:12px; opacity:.7 }
 </div>
 
 </body>
+  <audio controls autoplay loop>
+  <source src="ruta-de-la-cancion.mp3" type="audio/mpeg">
+</audio>
 </html>
